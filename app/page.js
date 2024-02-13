@@ -8,7 +8,7 @@ export default function page() {
       <Link className="text-blue-500 hover:underline " href="/week-2">Link to week-2 page</Link>
       <p><Link className="text-blue-500 hover:underline " href="/week-3">Link to week-3 page</Link></p>
       <p><Link className="text-blue-500 hover:underline " href="/week-4">Link to week-4 page</Link></p>
-   
+      <p><Link className="text-blue-500 hover:underline " href="/week-5">Link to week-5 page</Link></p>
     </main>
   );
 }
