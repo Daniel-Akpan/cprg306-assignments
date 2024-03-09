@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Item from "./item";
 
-const ItemList = ({ items }) => {
+const ItemList = ({ items, onItemSelect }) => {
   // Initialize state variable for sorting
   const [sortBy, setSortBy] = useState("name");
 
@@ -11,7 +11,8 @@ const ItemList = ({ items }) => {
         <h3>{category}</h3>
         <ul>
           {groupedItems[category].map((item) => (
-            <Item key={item.id} {...item} />
+            // Pass onItemSelect prop to the Item component
+            <Item key={item.id} {...item} onSelect={onItemSelect} />
           ))}
         </ul>
       </div>
@@ -54,7 +55,8 @@ const ItemList = ({ items }) => {
               }
             })
             .map((item) => (
-              <Item key={item.id} {...item} />
+              // Pass onItemSelect prop to the Item component
+              <Item key={item.id} {...item} onSelect={onItemSelect} />
             ))}
         </ul>
       )}
