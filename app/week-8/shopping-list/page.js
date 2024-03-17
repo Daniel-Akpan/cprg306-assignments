@@ -1,16 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import FetchMealIdeas from "./meal-ideas"; 
-import ItemList from "./item-list"; 
-import NewItem from "./new-item"; 
-import itemsData from "./items.json"; 
+import FetchMealIdeas from "./meal-ideas";
+import ItemList from "./item-list";
+import NewItem from "./new-item";
+import itemsData from "./items.json";
+import { useUserAuth } from '../_utils/auth-context.js'; 
 
 export default function Page() {
-  const [items, setItems] = useState(itemsData); 
-  const [selectedItemName, setSelectedItemName] = useState(""); 
-  const [showMealIdeas, setShowMealIdeas] = useState(false); 
+  const [items, setItems] = useState(itemsData);
+  const [selectedItemName, setSelectedItemName] = useState("");
+  const [showMealIdeas, setShowMealIdeas] = useState(false);
+  const { user } = useUserAuth(); // Get user authentication status
 
-  
   const handleAddItem = (newItem) => {
     setItems((currentItems) => {
       const existingItemIndex = currentItems.findIndex(
@@ -19,7 +20,6 @@ export default function Page() {
       );
 
       if (existingItemIndex !== -1) {
-        // Update quantity of the existing item
         return currentItems.map((item, index) => {
           if (index === existingItemIndex) {
             return { ...item, quantity: item.quantity + newItem.quantity };
@@ -27,13 +27,11 @@ export default function Page() {
           return item;
         });
       } else {
-        // Add new item
         return [...currentItems, newItem];
       }
     });
   };
 
-  // Event handler for selecting an item
   const handleItemSelect = (itemName) => {
     let cleanedName;
     if (typeof itemName === "string") {
@@ -54,29 +52,30 @@ export default function Page() {
     setSelectedItemName(cleanedName);
     setShowMealIdeas(true); // Set state to show meal ideas
   };
-
   return (
-    <main className="bg-slate">
-      <h1 className="text-3xl font-bold mb-4 text-center">
-        Shopping List
-      </h1>
-      <NewItem onAddItem={handleAddItem} />
-
-      {/* Flex container for both the item list and meal ideas */}
-      <div className="flex mt-4">
-
-        {/* Item List without extra margin */}
-        <div className="w-1/4">
-          <ItemList items={items} onItemSelect={handleItemSelect} />
-        </div>
-
-        {/* Meal Ideas, displayed only if showMealIdeas is true */}
-        {showMealIdeas && (
-          <div className="w-1/5">
-            <FetchMealIdeas ingredient={selectedItemName} />
+      <main className="bg-slate">
+        {user ? 
+        <> 
+        <h1 className="text-3xl font-bold mb-4 text-center">
+          Shopping List
+        </h1>
+        <NewItem onAddItem={handleAddItem} />
+        <div className="flex mt-4">
+          <div className="w-1/4">
+            <ItemList items={items} onItemSelect={handleItemSelect} />
           </div>
-        )}
-      </div>
-    </main>
+          {showMealIdeas && (
+            <div className="w-1/5">
+              <FetchMealIdeas ingredient={selectedItemName} />
+            </div>
+          )}
+        </div>
+        </>
+        :
+        <>
+        <div>Redirecting you to week 8!</div>
+        </>
+      }
+      </main>
   );
 }
